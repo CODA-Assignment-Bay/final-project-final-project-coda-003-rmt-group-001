@@ -23,8 +23,10 @@ with DAG('Final_Project',
     extract_data = BashOperator(task_id='extract_data', bash_command='sudo -u airflow python /opt/airflow/dags/extract.py')
 
     transform_data = BashOperator(task_id='transform_data', bash_command='sudo -u airflow python /opt/airflow/dags/transform.py')
-    
-    load_data = BashOperator(task_id='load_data', bash_command='sudo -u airflow python /opt/airflow/dags/load.py')
-    
 
-extract_data >> transform_data >> load_data
+    load_data = BashOperator(task_id='load_data', bash_command='sudo -u airflow python /opt/airflow/dags/load.py')
+
+    datamart = BashOperator(task_id='datamart', bash_command='sudo -u airflow python /opt/airflow/dags/datamart.py')
+
+
+extract_data >> transform_data >> load_data >> datamart
