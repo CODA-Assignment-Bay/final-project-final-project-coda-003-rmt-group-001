@@ -1,6 +1,6 @@
 import pyspark
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import when, col, concat, concat_ws, lit, to_date
+from pyspark.sql.functions import when, col, concat, concat_ws, lit, to_date, regexp_replace
 
 def transform_data(dfgni_path: str, dfgdp_path :str, dfedu_path: str,dfhomi_path :str):
     """
@@ -170,6 +170,9 @@ def transform_data(dfgni_path: str, dfgdp_path :str, dfedu_path: str,dfhomi_path
         final_dfgdp.country, final_dfgdp.year, final_dfgdp.gdp)
     # Inisiasi Primary Key
     fact_gdp = fact_gdp.withColumn("country_year", concat(col("country"),lit("_"),col("year")))
+    fact_gdp = fact_gdp.withColumn("gdp", regexp_replace("gdp", ",", "."))
+
+
 
     #Buat tabel fact homicide
     fact_homi = final_dfhomi.select(
